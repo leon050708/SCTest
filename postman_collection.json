@@ -1,0 +1,1170 @@
+{
+	"info": {
+		"_postman_id": "personal-assistant-api-collection",
+		"name": "个人助手API测试集合_改",
+		"description": "包含所有个人助手功能的API测试接口",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "支出管理",
+			"item": [
+				{
+					"name": "创建支出记录",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount\": 150.50,\n  \"category\": \"餐饮\",\n  \"description\": \"午餐费用\",\n  \"date\": \"2024-01-15T12:00:00\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/expenses",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "expenses"]
+						}
+					}
+				},
+				{
+					"name": "获取所有支出记录",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/expenses",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "expenses"]
+						}
+					}
+				},
+				{
+					"name": "根据ID获取支出记录",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/expenses/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "expenses", "1"]
+						}
+					}
+				},
+				{
+					"name": "更新支出记录",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount\": 200.00,\n  \"category\": \"餐饮\",\n  \"description\": \"晚餐费用\",\n  \"date\": \"2024-01-15T18:00:00\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/expenses/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "expenses", "1"]
+						}
+					}
+				},
+				{
+					"name": "删除支出记录",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/expenses/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "expenses", "1"]
+						}
+					}
+				},
+				{
+					"name": "根据类别查找支出",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/expenses/category/餐饮",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "expenses", "category", "餐饮"]
+						}
+					}
+				},
+				{
+					"name": "根据日期范围查找支出",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/expenses/date-range?startDate=2024-01-01T00:00:00&endDate=2024-01-31T23:59:59",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "expenses", "date-range"],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "2024-01-01T00:00:00"
+								},
+								{
+									"key": "endDate",
+									"value": "2024-01-31T23:59:59"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "根据金额范围查找支出",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/expenses/amount-range?minAmount=100&maxAmount=500",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "expenses", "amount-range"],
+							"query": [
+								{
+									"key": "minAmount",
+									"value": "100"
+								},
+								{
+									"key": "maxAmount",
+									"value": "500"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "根据描述模糊查找支出",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/expenses/search?description=午餐",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "expenses", "search"],
+							"query": [
+								{
+									"key": "description",
+									"value": "午餐"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "获取指定日期范围内的总支出",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/expenses/total/date-range?startDate=2024-01-01T00:00:00&endDate=2024-01-31T23:59:59",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "expenses", "total", "date-range"],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "2024-01-01T00:00:00"
+								},
+								{
+									"key": "endDate",
+									"value": "2024-01-31T23:59:59"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "获取指定类别的总支出",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/expenses/total/category/餐饮",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "expenses", "total", "category", "餐饮"]
+						}
+					}
+				},
+				{
+					"name": "获取按类别分组的支出统计",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/expenses/statistics/category",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "expenses", "statistics", "category"]
+						}
+					}
+				},
+				{
+					"name": "获取按月份分组的支出统计",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/expenses/statistics/month",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "expenses", "statistics", "month"]
+						}
+					}
+				},
+				{
+					"name": "获取本月总支出",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/expenses/total/current-month",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "expenses", "total", "current-month"]
+						}
+					}
+				},
+				{
+					"name": "获取本周总支出",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/expenses/total/current-week",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "expenses", "total", "current-week"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "收入管理",
+			"item": [
+				{
+					"name": "创建收入记录",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount\": 5000.00,\n  \"source\": \"工资\",\n  \"description\": \"月薪\",\n  \"date\": \"2024-01-15T09:00:00\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/incomes",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "incomes"]
+						}
+					}
+				},
+				{
+					"name": "获取所有收入记录",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/incomes",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "incomes"]
+						}
+					}
+				},
+				{
+					"name": "根据ID获取收入记录",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/incomes/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "incomes", "1"]
+						}
+					}
+				},
+				{
+					"name": "更新收入记录",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount\": 5500.00,\n  \"source\": \"工资\",\n  \"description\": \"月薪加奖金\",\n  \"date\": \"2024-01-15T09:00:00\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/incomes/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "incomes", "1"]
+						}
+					}
+				},
+				{
+					"name": "删除收入记录",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/incomes/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "incomes", "1"]
+						}
+					}
+				},
+				{
+					"name": "根据来源查找收入",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/incomes/source/工资",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "incomes", "source", "工资"]
+						}
+					}
+				},
+				{
+					"name": "根据日期范围查找收入",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/incomes/date-range?startDate=2024-01-01T00:00:00&endDate=2024-01-31T23:59:59",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "incomes", "date-range"],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "2024-01-01T00:00:00"
+								},
+								{
+									"key": "endDate",
+									"value": "2024-01-31T23:59:59"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "根据金额范围查找收入",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/incomes/amount-range?minAmount=1000&maxAmount=10000",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "incomes", "amount-range"],
+							"query": [
+								{
+									"key": "minAmount",
+									"value": "1000"
+								},
+								{
+									"key": "maxAmount",
+									"value": "10000"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "根据描述模糊查找收入",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/incomes/search?description=月薪",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "incomes", "search"],
+							"query": [
+								{
+									"key": "description",
+									"value": "月薪"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "获取指定日期范围内的总收入",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/incomes/total/date-range?startDate=2024-01-01T00:00:00&endDate=2024-01-31T23:59:59",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "incomes", "total", "date-range"],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "2024-01-01T00:00:00"
+								},
+								{
+									"key": "endDate",
+									"value": "2024-01-31T23:59:59"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "获取指定来源的总收入",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/incomes/total/source/工资",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "incomes", "total", "source", "工资"]
+						}
+					}
+				},
+				{
+					"name": "获取按来源分组的收入统计",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/incomes/statistics/source",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "incomes", "statistics", "source"]
+						}
+					}
+				},
+				{
+					"name": "获取按月份分组的收入统计",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/incomes/statistics/month",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "incomes", "statistics", "month"]
+						}
+					}
+				},
+				{
+					"name": "获取本月总收入",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/incomes/total/current-month",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "incomes", "total", "current-month"]
+						}
+					}
+				},
+				{
+					"name": "获取本周总收入",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/incomes/total/current-week",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "incomes", "total", "current-week"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "生活记录管理",
+			"item": [
+				{
+					"name": "创建生活记录",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"美好的一天\",\n  \"content\": \"今天天气很好，心情愉快\",\n  \"mood\": \"开心\",\n  \"weather\": \"晴天\",\n  \"location\": \"家里\",\n  \"tags\": \"生活,心情\",\n  \"date\": \"2024-01-15T14:00:00\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/life-records",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "life-records"]
+						}
+					}
+				},
+				{
+					"name": "获取所有生活记录",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/life-records",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "life-records"]
+						}
+					}
+				},
+				{
+					"name": "根据ID获取生活记录",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/life-records/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "life-records", "1"]
+						}
+					}
+				},
+				{
+					"name": "更新生活记录",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"更新后的美好一天\",\n  \"content\": \"今天天气很好，心情愉快，还去公园散步了\",\n  \"mood\": \"开心\",\n  \"weather\": \"晴天\",\n  \"location\": \"公园\",\n  \"tags\": \"生活,心情,运动\",\n  \"date\": \"2024-01-15T14:00:00\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/life-records/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "life-records", "1"]
+						}
+					}
+				},
+				{
+					"name": "删除生活记录",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/life-records/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "life-records", "1"]
+						}
+					}
+				},
+				{
+					"name": "根据心情查找记录",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/life-records/mood/开心",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "life-records", "mood", "开心"]
+						}
+					}
+				},
+				{
+					"name": "根据日期范围查找记录",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/life-records/date-range?startDate=2024-01-01T00:00:00&endDate=2024-01-31T23:59:59",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "life-records", "date-range"],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "2024-01-01T00:00:00"
+								},
+								{
+									"key": "endDate",
+									"value": "2024-01-31T23:59:59"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "根据标题模糊查找",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/life-records/search/title?title=美好",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "life-records", "search", "title"],
+							"query": [
+								{
+									"key": "title",
+									"value": "美好"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "根据内容模糊查找",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/life-records/search/content?content=天气",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "life-records", "search", "content"],
+							"query": [
+								{
+									"key": "content",
+									"value": "天气"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "根据标签查找",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/life-records/search/tags?tags=生活",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "life-records", "search", "tags"],
+							"query": [
+								{
+									"key": "tags",
+									"value": "生活"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "根据天气查找记录",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/life-records/weather/晴天",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "life-records", "weather", "晴天"]
+						}
+					}
+				},
+				{
+					"name": "根据位置查找记录",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/life-records/search/location?location=家里",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "life-records", "search", "location"],
+							"query": [
+								{
+									"key": "location",
+									"value": "家里"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "获取最近的记录",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/life-records/recent",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "life-records", "recent"]
+						}
+					}
+				},
+				{
+					"name": "获取按心情分组的统计",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/life-records/statistics/mood",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "life-records", "statistics", "mood"]
+						}
+					}
+				},
+				{
+					"name": "获取按月份分组的统计",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/life-records/statistics/month",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "life-records", "statistics", "month"]
+						}
+					}
+				},
+				{
+					"name": "获取本月记录数量",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/life-records/count/current-month",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "life-records", "count", "current-month"]
+						}
+					}
+				},
+				{
+					"name": "获取本周记录数量",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/life-records/count/current-week",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "life-records", "count", "current-week"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "健康记录管理",
+			"item": [
+				{
+					"name": "创建健康记录",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"weight\": 70.5,\n  \"heartRate\": 75,\n  \"exerciseType\": \"跑步\",\n  \"exerciseDuration\": 30,\n  \"sleepDuration\": 8,\n  \"notes\": \"今天感觉很好\",\n  \"date\": \"2024-01-15T07:00:00\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/health-records",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "health-records"]
+						}
+					}
+				},
+				{
+					"name": "获取所有健康记录",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/health-records",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "health-records"]
+						}
+					}
+				},
+				{
+					"name": "根据ID获取健康记录",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/health-records/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "health-records", "1"]
+						}
+					}
+				},
+				{
+					"name": "更新健康记录",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"weight\": 70.0,\n  \"heartRate\": 72,\n  \"exerciseType\": \"跑步\",\n  \"exerciseDuration\": 45,\n  \"sleepDuration\": 8,\n  \"notes\": \"今天感觉很好，体重有所下降\",\n  \"date\": \"2024-01-15T07:00:00\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/health-records/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "health-records", "1"]
+						}
+					}
+				},
+				{
+					"name": "删除健康记录",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/health-records/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "health-records", "1"]
+						}
+					}
+				},
+				{
+					"name": "根据日期范围查找记录",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/health-records/date-range?startDate=2024-01-01T00:00:00&endDate=2024-01-31T23:59:59",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "health-records", "date-range"],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "2024-01-01T00:00:00"
+								},
+								{
+									"key": "endDate",
+									"value": "2024-01-31T23:59:59"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "根据体重范围查找",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/health-records/weight-range?minWeight=65&maxWeight=75",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "health-records", "weight-range"],
+							"query": [
+								{
+									"key": "minWeight",
+									"value": "65"
+								},
+								{
+									"key": "maxWeight",
+									"value": "75"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "根据运动类型查找",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/health-records/exercise-type/跑步",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "health-records", "exercise-type", "跑步"]
+						}
+					}
+				},
+				{
+					"name": "根据运动时长范围查找",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/health-records/exercise-duration-range?minDuration=20&maxDuration=60",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "health-records", "exercise-duration-range"],
+							"query": [
+								{
+									"key": "minDuration",
+									"value": "20"
+								},
+								{
+									"key": "maxDuration",
+									"value": "60"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "根据睡眠时长范围查找",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/health-records/sleep-duration-range?minDuration=6&maxDuration=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "health-records", "sleep-duration-range"],
+							"query": [
+								{
+									"key": "minDuration",
+									"value": "6"
+								},
+								{
+									"key": "maxDuration",
+									"value": "10"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "获取最近的记录",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/health-records/recent",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "health-records", "recent"]
+						}
+					}
+				},
+				{
+					"name": "获取指定日期范围内的平均体重",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/health-records/average-weight/date-range?startDate=2024-01-01T00:00:00&endDate=2024-01-31T23:59:59",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "health-records", "average-weight", "date-range"],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "2024-01-01T00:00:00"
+								},
+								{
+									"key": "endDate",
+									"value": "2024-01-31T23:59:59"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "获取指定日期范围内的平均心率",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/health-records/average-heart-rate/date-range?startDate=2024-01-01T00:00:00&endDate=2024-01-31T23:59:59",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "health-records", "average-heart-rate", "date-range"],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "2024-01-01T00:00:00"
+								},
+								{
+									"key": "endDate",
+									"value": "2024-01-31T23:59:59"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "获取指定日期范围内的平均运动时长",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/health-records/average-exercise-duration/date-range?startDate=2024-01-01T00:00:00&endDate=2024-01-31T23:59:59",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "health-records", "average-exercise-duration", "date-range"],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "2024-01-01T00:00:00"
+								},
+								{
+									"key": "endDate",
+									"value": "2024-01-31T23:59:59"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "获取指定日期范围内的平均睡眠时长",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/health-records/average-sleep-duration/date-range?startDate=2024-01-01T00:00:00&endDate=2024-01-31T23:59:59",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "health-records", "average-sleep-duration", "date-range"],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "2024-01-01T00:00:00"
+								},
+								{
+									"key": "endDate",
+									"value": "2024-01-31T23:59:59"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "获取按月份分组的平均体重统计",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/health-records/statistics/weight-by-month",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "health-records", "statistics", "weight-by-month"]
+						}
+					}
+				},
+				{
+					"name": "获取按运动类型分组的统计",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/health-records/statistics/exercise-type",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "health-records", "statistics", "exercise-type"]
+						}
+					}
+				},
+				{
+					"name": "获取体重变化趋势",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/health-records/weight-trend?startDate=2024-01-01T00:00:00",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "health-records", "weight-trend"],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "2024-01-01T00:00:00"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "获取本月平均体重",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/health-records/average-weight/current-month",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "health-records", "average-weight", "current-month"]
+						}
+					}
+				},
+				{
+					"name": "获取本周平均运动时长",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/health-records/average-exercise-duration/current-week",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "health-records", "average-exercise-duration", "current-week"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "仪表板",
+			"item": [
+				{
+					"name": "获取仪表板概览数据",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/dashboard/overview",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "dashboard", "overview"]
+						}
+					}
+				},
+				{
+					"name": "获取财务统计",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/dashboard/finance",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "dashboard", "finance"]
+						}
+					}
+				},
+				{
+					"name": "获取生活记录统计",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/dashboard/life",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "dashboard", "life"]
+						}
+					}
+				},
+				{
+					"name": "获取健康统计",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/dashboard/health",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "dashboard", "health"]
+						}
+					}
+				},
+				{
+					"name": "获取综合报告",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/dashboard/report",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "dashboard", "report"]
+						}
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080",
+			"type": "string"
+		}
+	]
+} 

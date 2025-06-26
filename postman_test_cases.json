@@ -1,0 +1,355 @@
+{
+  "info": {
+    "name": "个人助手API测试用例",
+    "description": "包含所有接口的测试数据和验证脚本",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "支出管理测试",
+      "item": [
+        {
+          "name": "创建支出记录-正常",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 150.50,\n  \"category\": \"餐饮\",\n  \"description\": \"午餐费用\",\n  \"date\": \"2024-01-15T12:00:00\"\n}"
+            },
+            "url": "{{baseUrl}}/api/expenses"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "pm.test(\"响应包含ID\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.id).to.exist;",
+                  "    pm.expect(jsonData.amount).to.eql(150.50);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "创建支出记录-验证失败",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": -100,\n  \"category\": \"\",\n  \"description\": \"\",\n  \"date\": \"2024-01-15T12:00:00\"\n}"
+            },
+            "url": "{{baseUrl}}/api/expenses"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为400\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "获取所有支出记录",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/expenses"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"返回数组\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.be.an('array');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "根据类别查找支出",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/expenses/category/餐饮"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"所有记录类别都是餐饮\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    jsonData.forEach(function(item) {",
+                  "        pm.expect(item.category).to.eql('餐饮');",
+                  "    });",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "收入管理测试",
+      "item": [
+        {
+          "name": "创建收入记录-正常",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 5000.00,\n  \"source\": \"工资\",\n  \"description\": \"月薪\",\n  \"date\": \"2024-01-15T09:00:00\"\n}"
+            },
+            "url": "{{baseUrl}}/api/incomes"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "pm.test(\"响应包含正确数据\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.amount).to.eql(5000.00);",
+                  "    pm.expect(jsonData.source).to.eql('工资');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "根据来源查找收入",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/incomes/source/工资"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "生活记录测试",
+      "item": [
+        {
+          "name": "创建生活记录-正常",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"美好的一天\",\n  \"content\": \"今天天气很好，心情愉快\",\n  \"mood\": \"开心\",\n  \"weather\": \"晴天\",\n  \"location\": \"家里\",\n  \"tags\": \"生活,心情\",\n  \"date\": \"2024-01-15T14:00:00\"\n}"
+            },
+            "url": "{{baseUrl}}/api/life-records"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "pm.test(\"响应包含正确数据\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.title).to.eql('美好的一天');",
+                  "    pm.expect(jsonData.mood).to.eql('开心');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "根据心情查找记录",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/life-records/mood/开心"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "健康记录测试",
+      "item": [
+        {
+          "name": "创建健康记录-正常",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"weight\": 70.5,\n  \"heartRate\": 75,\n  \"exerciseType\": \"跑步\",\n  \"exerciseDuration\": 2,\n  \"sleepDuration\": 8,\n  \"notes\": \"今天感觉很好\",\n  \"date\": \"2024-01-15T07:00:00\"\n}"
+            },
+            "url": "{{baseUrl}}/api/health-records"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "pm.test(\"响应包含正确数据\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.weight).to.eql(70.5);",
+                  "    pm.expect(jsonData.exerciseDuration).to.eql(2);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "创建健康记录-运动时长超限",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"weight\": 70.5,\n  \"heartRate\": 75,\n  \"exerciseType\": \"跑步\",\n  \"exerciseDuration\": 25,\n  \"sleepDuration\": 8,\n  \"notes\": \"今天感觉很好\",\n  \"date\": \"2024-01-15T07:00:00\"\n}"
+            },
+            "url": "{{baseUrl}}/api/health-records"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为400\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "根据运动类型查找",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/health-records/exercise-type/跑步"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "仪表板测试",
+      "item": [
+        {
+          "name": "获取仪表板概览",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/dashboard/overview"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"包含概览数据\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('totalExpenses');",
+                  "    pm.expect(jsonData).to.have.property('totalIncomes');",
+                  "    pm.expect(jsonData).to.have.property('totalLifeRecords');",
+                  "    pm.expect(jsonData).to.have.property('totalHealthRecords');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "获取财务统计",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/dashboard/finance"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"状态码为200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ]
+} 

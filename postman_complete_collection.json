@@ -1,0 +1,1875 @@
+{
+	"info": {
+		"_postman_id": "personal-assistant-api-complete-collection",
+		"name": "个人助手API完整测试集合_改2",
+		"description": "包含所有个人助手功能的API测试接口，带有完整的断言脚本和测试数据",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "支出管理",
+			"item": [
+				{
+					"name": "创建支出记录",
+					"item": [
+						{
+							"name": "正常创建-餐饮支出",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"amount\": 150.50,\n  \"category\": \"餐饮\",\n  \"description\": \"午餐费用\",\n  \"date\": \"2024-01-15T12:00:00\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/expenses",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "expenses"]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为201\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"pm.test(\"响应包含ID\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.id).to.exist;",
+											"    pm.expect(jsonData.amount).to.eql(150.50);",
+											"    pm.expect(jsonData.category).to.eql('餐饮');",
+											"});",
+											"pm.test(\"响应时间小于2000ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+											"});"
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "正常创建-交通支出",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"amount\": 25.00,\n  \"category\": \"交通\",\n  \"description\": \"地铁费用\",\n  \"date\": \"2024-01-15T08:30:00\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/expenses",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "expenses"]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为201\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"pm.test(\"交通支出创建成功\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.category).to.eql('交通');",
+											"    pm.expect(jsonData.amount).to.eql(25.00);",
+											"});"
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "边界值测试-最小金额",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"amount\": 0.01,\n  \"category\": \"测试\",\n  \"description\": \"最小金额测试\",\n  \"date\": \"2024-01-15T12:00:00\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/expenses",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "expenses"]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为201\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"pm.test(\"最小金额创建成功\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.amount).to.eql(0.01);",
+											"});"
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "边界值测试-最大金额",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"amount\": 999999.99,\n  \"category\": \"大额支出\",\n  \"description\": \"最大金额测试\",\n  \"date\": \"2024-01-15T12:00:00\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/expenses",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "expenses"]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为201\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"pm.test(\"最大金额创建成功\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.amount).to.eql(999999.99);",
+											"});"
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "验证失败-负数金额",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"amount\": -100,\n  \"category\": \"餐饮\",\n  \"description\": \"午餐费用\",\n  \"date\": \"2024-01-15T12:00:00\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/expenses",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "expenses"]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"pm.test(\"包含验证错误信息\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData).to.have.property('message');",
+											"});"
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "验证失败-空类别",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"amount\": 150.50,\n  \"category\": \"\",\n  \"description\": \"午餐费用\",\n  \"date\": \"2024-01-15T12:00:00\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/expenses",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "expenses"]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});"
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "验证失败-空描述",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"amount\": 150.50,\n  \"category\": \"餐饮\",\n  \"description\": \"\",\n  \"date\": \"2024-01-15T12:00:00\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/expenses",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "expenses"]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});"
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "验证失败-无效日期格式",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"amount\": 150.50,\n  \"category\": \"餐饮\",\n  \"description\": \"午餐费用\",\n  \"date\": \"2024-01-15\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/expenses",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "expenses"]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});"
+										]
+									}
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "获取支出记录",
+					"item": [
+						{
+							"name": "获取所有支出记录",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/expenses",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "expenses"]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"pm.test(\"返回数组\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData).to.be.an('array');",
+											"});",
+											"pm.test(\"响应时间小于1000ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+											"});"
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "根据ID获取-存在",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/expenses/1",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "expenses", "1"]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"pm.test(\"返回单个对象\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData).to.have.property('id');",
+											"    pm.expect(jsonData.id).to.eql(1);",
+											"});"
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "根据ID获取-不存在",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/expenses/999",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "expenses", "999"]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为404\", function () {",
+											"    pm.response.to.have.status(404);",
+											"});"
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "根据ID获取-无效ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/expenses/abc",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "expenses", "abc"]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});"
+										]
+									}
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "更新支出记录",
+					"item": [
+						{
+							"name": "正常更新",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"amount\": 200.00,\n  \"category\": \"餐饮\",\n  \"description\": \"晚餐费用\",\n  \"date\": \"2024-01-15T18:00:00\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/expenses/1",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "expenses", "1"]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"pm.test(\"更新成功\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.amount).to.eql(200.00);",
+											"    pm.expect(jsonData.description).to.eql('晚餐费用');",
+											"});"
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "更新不存在的记录",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"amount\": 200.00,\n  \"category\": \"餐饮\",\n  \"description\": \"晚餐费用\",\n  \"date\": \"2024-01-15T18:00:00\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/expenses/999",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "expenses", "999"]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为404\", function () {",
+											"    pm.response.to.have.status(404);",
+											"});"
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "更新验证失败",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"amount\": -50,\n  \"category\": \"\",\n  \"description\": \"\",\n  \"date\": \"2024-01-15T18:00:00\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/expenses/1",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "expenses", "1"]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});"
+										]
+									}
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "删除支出记录",
+					"item": [
+						{
+							"name": "正常删除",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/expenses/1",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "expenses", "1"]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为204\", function () {",
+											"    pm.response.to.have.status(204);",
+											"});"
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "删除不存在的记录",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/expenses/999",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "expenses", "999"]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为404\", function () {",
+											"    pm.response.to.have.status(404);",
+											"});"
+										]
+									}
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "查询支出记录",
+					"item": [
+						{
+							"name": "按类别查找-餐饮",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/expenses/category/餐饮",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "expenses", "category", "餐饮"]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"pm.test(\"所有记录类别都是餐饮\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    jsonData.forEach(function(item) {",
+											"        pm.expect(item.category).to.eql('餐饮');",
+											"    });",
+											"});"
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "按类别查找-交通",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/expenses/category/交通",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "expenses", "category", "交通"]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"pm.test(\"所有记录类别都是交通\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    jsonData.forEach(function(item) {",
+											"        pm.expect(item.category).to.eql('交通');",
+											"    });",
+											"});"
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "按类别查找-不存在的类别",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/expenses/category/不存在的类别",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "expenses", "category", "不存在的类别"]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"pm.test(\"返回空数组\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData).to.be.an('array');",
+											"    pm.expect(jsonData).to.have.length(0);",
+											"});"
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "按日期范围查找-本月",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/expenses/date-range?startDate=2024-01-01T00:00:00&endDate=2024-01-31T23:59:59",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "expenses", "date-range"],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2024-01-01T00:00:00"
+										},
+										{
+											"key": "endDate",
+											"value": "2024-01-31T23:59:59"
+										}
+									]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"pm.test(\"返回数组\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData).to.be.an('array');",
+											"});"
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "按日期范围查找-本周",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/expenses/date-range?startDate=2024-01-15T00:00:00&endDate=2024-01-21T23:59:59",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "expenses", "date-range"],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2024-01-15T00:00:00"
+										},
+										{
+											"key": "endDate",
+											"value": "2024-01-21T23:59:59"
+										}
+									]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"pm.test(\"返回数组\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData).to.be.an('array');",
+											"});"
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "按金额范围查找-小额",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/expenses/amount-range?minAmount=0&maxAmount=100",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "expenses", "amount-range"],
+									"query": [
+										{
+											"key": "minAmount",
+											"value": "0"
+										},
+										{
+											"key": "maxAmount",
+											"value": "100"
+										}
+									]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"pm.test(\"金额在指定范围内\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    jsonData.forEach(function(item) {",
+											"        pm.expect(item.amount).to.be.at.least(0);",
+											"        pm.expect(item.amount).to.be.at.most(100);",
+											"    });",
+											"});"
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "按金额范围查找-大额",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/expenses/amount-range?minAmount=500&maxAmount=1000",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "expenses", "amount-range"],
+									"query": [
+										{
+											"key": "minAmount",
+											"value": "500"
+										},
+										{
+											"key": "maxAmount",
+											"value": "1000"
+										}
+									]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"pm.test(\"金额在指定范围内\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    jsonData.forEach(function(item) {",
+											"        pm.expect(item.amount).to.be.at.least(500);",
+											"        pm.expect(item.amount).to.be.at.most(1000);",
+											"    });",
+											"});"
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "按描述模糊查找-午餐",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/expenses/search?description=午餐",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "expenses", "search"],
+									"query": [
+										{
+											"key": "description",
+											"value": "午餐"
+										}
+									]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"pm.test(\"返回数组\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData).to.be.an('array');",
+											"});"
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "按描述模糊查找-费用",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/expenses/search?description=费用",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "expenses", "search"],
+									"query": [
+										{
+											"key": "description",
+											"value": "费用"
+										}
+									]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"pm.test(\"返回数组\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData).to.be.an('array');",
+											"});"
+										]
+									}
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "收入管理",
+			"item": [
+				{
+					"name": "创建收入记录",
+					"item": [
+						{
+							"name": "正常创建-工资收入",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"amount\": 5000.00,\n  \"source\": \"工资\",\n  \"description\": \"月薪\",\n  \"date\": \"2024-01-15T09:00:00\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/incomes",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "incomes"]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为201\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"pm.test(\"响应包含ID\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.id).to.exist;",
+											"    pm.expect(jsonData.amount).to.eql(5000.00);",
+											"    pm.expect(jsonData.source).to.eql('工资');",
+											"});",
+											"pm.test(\"响应时间小于2000ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+											"});"
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "正常创建-兼职收入",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"amount\": 800.00,\n  \"source\": \"兼职\",\n  \"description\": \"周末兼职\",\n  \"date\": \"2024-01-20T14:00:00\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/incomes",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "incomes"]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为201\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"pm.test(\"兼职收入创建成功\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.source).to.eql('兼职');",
+											"    pm.expect(jsonData.amount).to.eql(800.00);",
+											"});"
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "正常创建-投资收入",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"amount\": 1200.00,\n  \"source\": \"投资\",\n  \"description\": \"股票分红\",\n  \"date\": \"2024-01-25T10:00:00\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/incomes",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "incomes"]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为201\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"pm.test(\"投资收入创建成功\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.source).to.eql('投资');",
+											"    pm.expect(jsonData.amount).to.eql(1200.00);",
+											"});"
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "边界值测试-最小金额",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"amount\": 0.01,\n  \"source\": \"兼职\",\n  \"description\": \"最小收入测试\",\n  \"date\": \"2024-01-15T09:00:00\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/incomes",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "incomes"]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为201\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"pm.test(\"最小金额创建成功\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.amount).to.eql(0.01);",
+											"});"
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "边界值测试-最大金额",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"amount\": 999999.99,\n  \"source\": \"大额收入\",\n  \"description\": \"最大金额测试\",\n  \"date\": \"2024-01-15T09:00:00\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/incomes",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "incomes"]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为201\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"pm.test(\"最大金额创建成功\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.amount).to.eql(999999.99);",
+											"});"
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "验证失败-负数金额",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"amount\": -1000,\n  \"source\": \"工资\",\n  \"description\": \"月薪\",\n  \"date\": \"2024-01-15T09:00:00\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/incomes",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "incomes"]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"pm.test(\"包含验证错误信息\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData).to.have.property('message');",
+											"});"
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "验证失败-空来源",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"amount\": 5000.00,\n  \"source\": \"\",\n  \"description\": \"月薪\",\n  \"date\": \"2024-01-15T09:00:00\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/incomes",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "incomes"]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});"
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "验证失败-空描述",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"amount\": 5000.00,\n  \"source\": \"工资\",\n  \"description\": \"\",\n  \"date\": \"2024-01-15T09:00:00\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/incomes",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "incomes"]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});"
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "验证失败-无效日期格式",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"amount\": 5000.00,\n  \"source\": \"工资\",\n  \"description\": \"月薪\",\n  \"date\": \"2024-01-15\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/incomes",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "incomes"]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});"
+										]
+									}
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "获取收入记录",
+					"item": [
+						{
+							"name": "获取所有收入记录",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/incomes",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "incomes"]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"pm.test(\"返回数组\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData).to.be.an('array');",
+											"});",
+											"pm.test(\"响应时间小于1000ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+											"});"
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "根据ID获取-存在",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/incomes/1",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "incomes", "1"]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"pm.test(\"返回单个对象\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData).to.have.property('id');",
+											"    pm.expect(jsonData.id).to.eql(1);",
+											"});"
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "根据ID获取-不存在",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/incomes/999",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "incomes", "999"]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为404\", function () {",
+											"    pm.response.to.have.status(404);",
+											"});"
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "根据ID获取-无效ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/incomes/abc",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "incomes", "abc"]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});"
+										]
+									}
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "更新收入记录",
+					"item": [
+						{
+							"name": "正常更新",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"amount\": 5500.00,\n  \"source\": \"工资\",\n  \"description\": \"月薪加奖金\",\n  \"date\": \"2024-01-15T09:00:00\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/incomes/1",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "incomes", "1"]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"pm.test(\"更新成功\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.amount).to.eql(5500.00);",
+											"    pm.expect(jsonData.description).to.eql('月薪加奖金');",
+											"});"
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "更新不存在的记录",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"amount\": 5500.00,\n  \"source\": \"工资\",\n  \"description\": \"月薪加奖金\",\n  \"date\": \"2024-01-15T09:00:00\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/incomes/999",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "incomes", "999"]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为404\", function () {",
+											"    pm.response.to.have.status(404);",
+											"});"
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "更新验证失败",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"amount\": -500,\n  \"source\": \"\",\n  \"description\": \"\",\n  \"date\": \"2024-01-15T09:00:00\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/incomes/1",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "incomes", "1"]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});"
+										]
+									}
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "删除收入记录",
+					"item": [
+						{
+							"name": "正常删除",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/incomes/1",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "incomes", "1"]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为204\", function () {",
+											"    pm.response.to.have.status(204);",
+											"});"
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "删除不存在的记录",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/incomes/999",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "incomes", "999"]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为404\", function () {",
+											"    pm.response.to.have.status(404);",
+											"});"
+										]
+									}
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "查询收入记录",
+					"item": [
+						{
+							"name": "按来源查找-工资",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/incomes/source/工资",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "incomes", "source", "工资"]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"pm.test(\"所有记录来源都是工资\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    jsonData.forEach(function(item) {",
+											"        pm.expect(item.source).to.eql('工资');",
+											"    });",
+											"});"
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "按来源查找-兼职",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/incomes/source/兼职",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "incomes", "source", "兼职"]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"pm.test(\"所有记录来源都是兼职\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    jsonData.forEach(function(item) {",
+											"        pm.expect(item.source).to.eql('兼职');",
+											"    });",
+											"});"
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "按来源查找-投资",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/incomes/source/投资",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "incomes", "source", "投资"]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"pm.test(\"所有记录来源都是投资\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    jsonData.forEach(function(item) {",
+											"        pm.expect(item.source).to.eql('投资');",
+											"    });",
+											"});"
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "按来源查找-不存在的来源",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/incomes/source/不存在的来源",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "incomes", "source", "不存在的来源"]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"pm.test(\"返回空数组\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData).to.be.an('array');",
+											"    pm.expect(jsonData).to.have.length(0);",
+											"});"
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "按日期范围查找-本月",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/incomes/date-range?startDate=2024-01-01T00:00:00&endDate=2024-01-31T23:59:59",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "incomes", "date-range"],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2024-01-01T00:00:00"
+										},
+										{
+											"key": "endDate",
+											"value": "2024-01-31T23:59:59"
+										}
+									]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"pm.test(\"返回数组\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData).to.be.an('array');",
+											"});"
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "按日期范围查找-本周",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/incomes/date-range?startDate=2024-01-15T00:00:00&endDate=2024-01-21T23:59:59",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "incomes", "date-range"],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2024-01-15T00:00:00"
+										},
+										{
+											"key": "endDate",
+											"value": "2024-01-21T23:59:59"
+										}
+									]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"pm.test(\"返回数组\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData).to.be.an('array');",
+											"});"
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "按金额范围查找-小额",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/incomes/amount-range?minAmount=0&maxAmount=1000",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "incomes", "amount-range"],
+									"query": [
+										{
+											"key": "minAmount",
+											"value": "0"
+										},
+										{
+											"key": "maxAmount",
+											"value": "1000"
+										}
+									]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"pm.test(\"金额在指定范围内\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    jsonData.forEach(function(item) {",
+											"        pm.expect(item.amount).to.be.at.least(0);",
+											"        pm.expect(item.amount).to.be.at.most(1000);",
+											"    });",
+											"});"
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "按金额范围查找-大额",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/incomes/amount-range?minAmount=5000&maxAmount=10000",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "incomes", "amount-range"],
+									"query": [
+										{
+											"key": "minAmount",
+											"value": "5000"
+										},
+										{
+											"key": "maxAmount",
+											"value": "10000"
+										}
+									]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"pm.test(\"金额在指定范围内\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    jsonData.forEach(function(item) {",
+											"        pm.expect(item.amount).to.be.at.least(5000);",
+											"        pm.expect(item.amount).to.be.at.most(10000);",
+											"    });",
+											"});"
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "按描述模糊查找-月薪",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/incomes/search?description=月薪",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "incomes", "search"],
+									"query": [
+										{
+											"key": "description",
+											"value": "月薪"
+										}
+									]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"pm.test(\"返回数组\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData).to.be.an('array');",
+											"});"
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "按描述模糊查找-兼职",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/incomes/search?description=兼职",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "incomes", "search"],
+									"query": [
+										{
+											"key": "description",
+											"value": "兼职"
+										}
+									]
+								}
+							},
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"状态码为200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"pm.test(\"返回数组\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData).to.be.an('array');",
+											"});"
+										]
+									}
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080",
+			"type": "string"
+		}
+	]
+} 
